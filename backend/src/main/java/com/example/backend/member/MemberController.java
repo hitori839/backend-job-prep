@@ -10,41 +10,32 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
-@RequestMapping("/members")
+@RequestMapping("/members" )
 public class MemberController {
 
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
-    public MemberController(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Member create(@RequestBody CreateMemberRequest request) {
-        Member member = new Member(null, request.email(), request.name());
-        return memberRepository.save(member);
+        return memberService.register(request.email(), request.name());
     }
 
     @GetMapping
     public List<Member> findAll() {
-        return memberRepository.findAll();
+        return memberService.findAll();
     }
 
     @GetMapping("/{id}")
     public Member findById(@PathVariable Long id) {
-        return memberRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+        return memberService.findById(id);
     }
-
-    public String getMethodName(@RequestParam String param) {
-        return new String();
-    }
-    
 
     public record CreateMemberRequest(String email, String name) {
     }
