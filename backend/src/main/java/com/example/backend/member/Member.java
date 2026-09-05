@@ -1,9 +1,17 @@
 package com.example.backend.member;
 
+import com.example.backend.post.Post;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,17 +25,14 @@ public class Member {
     private String email;
     private String name;
 
+    @OneToMany(mappedBy = "member")
+    @JsonIgnore
+    private List<Post> posts = new ArrayList<>();
+
     protected Member() {
-        // JPA가 Entity를 만들 때 사용하는 기본 생성자입니다.
     }
 
     public Member(String email, String name) {
-        this.email = email;
-        this.name = name;
-    }
-
-    public Member(Long id, String email, String name) {
-        this.id = id;
         this.email = email;
         this.name = name;
     }
@@ -42,6 +47,10 @@ public class Member {
 
     public String getName() {
         return name;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
     }
 
     public void changeName(String name) {
