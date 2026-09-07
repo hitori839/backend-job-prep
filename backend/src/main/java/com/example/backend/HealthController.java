@@ -1,5 +1,6 @@
 package com.example.backend;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,11 +8,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HealthController {
+
     @GetMapping("/health")
-    public Map<String, String> health() {
+    public Map<String, Object> health() {
         return Map.of(
                 "status", "UP",
-                "message", "Backend server is running"
-        );
+                "message", "Spring Boot server is working",
+                "time", LocalDateTime.now().toString());
     }
 }
