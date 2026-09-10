@@ -1,9 +1,0 @@
-.git
-.gitignore
-.github
-.idea
-.vscode
-node_modules
-*.log
-.env
-.env.*
