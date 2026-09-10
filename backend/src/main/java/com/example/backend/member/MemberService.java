@@ -2,6 +2,8 @@ package com.example.backend.member;
 
 import java.util.List;
 
+import com.example.backend.member.dto.MemberCreateRequest;
+import com.example.backend.member.dto.MemberResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,5 +56,16 @@ public class MemberService {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("이름은 필수입니다.");
         }
+    }
+
+    @Transactional
+    public MemberResponse join(MemberCreateRequest request) {
+        if (memberJpaRepository.existsByEmail(request.getEmail())) {
+            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+        }
+
+        Member member = new Member(request.getName(), request.getEmail());
+        Member savedMember = memberJpaRepository.save(member);
+        return MemberResponse.from(savedMember);
     }
 }
